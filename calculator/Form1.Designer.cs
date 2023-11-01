@@ -72,7 +72,6 @@
             StatusText.Size = new Size(28, 15);
             StatusText.TabIndex = 3;
             StatusText.Text = "Text";
-            StatusText.Click += StatusText_Click;
             // 
             // SubtractionButton
             // 
@@ -117,7 +116,7 @@
             Controls.Add(ResultButton);
             Controls.Add(AddingButton);
             Name = "Form1";
-            Text = "Form1";
+            Text = "Calculator";
             Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();
