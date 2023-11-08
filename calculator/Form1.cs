@@ -11,7 +11,18 @@ namespace calculator
         {
             this.number1 = number1;
             this.number2 = number2;
-            result = number1 + number2;
+            if (dnumber1 == 0 && dnumber2 == 0)
+            {
+                result = number1 + number2;
+            }
+            else if (dnumber1 != 0 && number2 != 0)
+            {
+                dresult = dnumber1 + Convert.ToDouble(number2);
+            }
+            else
+            {
+                dresult = Convert.ToDouble(number1) + dnumber2;
+            }
         }
 
         public void dadding(double dnumber1, double dnumber2)
@@ -25,7 +36,18 @@ namespace calculator
         {
             this.number1 = number1;
             this.number2 = number2;
-            result = number1 - number2;
+            if (dnumber1 == 0 && dnumber2 == 0)
+            {
+                result = number1 - number2;
+            }
+            else if (dnumber1 != 0 && number2 != 0)
+            {
+                dresult = dnumber1 - Convert.ToDouble(number2);
+            }
+            else
+            {
+                dresult = Convert.ToDouble(number1) - dnumber2;
+            }
         }
 
         public void d_subtracting(double dnumber1, double dnumber2)
@@ -39,13 +61,24 @@ namespace calculator
         {
             this.number1 = number1;
             this.number2 = number2;
-            if (number1 % number2 == 0)
+            if (dnumber1 == 0 && dnumber2 == 0)
             {
-                result = number1 / number2;
+                if (number1 % number2 == 0)
+                {
+                    result = number1 / number2;
+                }
+                else
+                {
+                    dresult = (double)number1 / (double)number2;
+                }
+            } 
+            else if (dnumber1 != 0 && number2 != 0)
+            {
+                dresult = dnumber1 / Convert.ToDouble(number2);
             }
             else
             {
-                dresult = (double)number1 / (double)number2;
+                dresult = Convert.ToDouble(number1) / dnumber2;
             }
         }
 
@@ -86,16 +119,6 @@ namespace calculator
             dresult = 0;
         }
 
-        public Form1()
-        {
-            InitializeComponent();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            StatusText.Text = "Adja meg az elso szamot!";
-        }
-
         bool IntParser(bool status)
         {
             if (int.TryParse(NumberTextBox.Text, out int value))
@@ -124,23 +147,39 @@ namespace calculator
         {
             if (IntParser(true))
             {
-                if (number1 == 0)
+                if (number1 == 0 || dnumber1 != 0)
                 {
-                    number1 = Convert.ToInt32(NumberTextBox.Text);
-                    StatusText.Text = number1.ToString();
+                    if (dnumber1 != 0)
+                    {
+                        number2 = Convert.ToInt32(NumberTextBox.Text);
+                        StatusText.Text = dnumber1 + " + " + number2;
+                    }
+                    else
+                    {
+                        number1 = Convert.ToInt32(NumberTextBox.Text);
+                        StatusText.Text = number1.ToString();
+                    }
                 }
                 else
                 {
                     number2 = Convert.ToInt32(NumberTextBox.Text);
-                    StatusText.Text = number1.ToString() + " + " + number2.ToString();
+                    StatusText.Text = number1 + " + " + number2;
                 }
             }
             else if (DoubleParser(true))
             {
-                if (dnumber1 == 0)
+                if (dnumber1 == 0 || number1 != 0)
                 {
-                    dnumber1 = Convert.ToDouble(NumberTextBox.Text);
-                    StatusText.Text = dnumber1.ToString();
+                    if (number1 != 0)
+                    {
+                        dnumber2 = Convert.ToDouble(NumberTextBox.Text);
+                        StatusText.Text = number1.ToString() + " + " + dnumber2.ToString();
+                    }
+                    else
+                    {
+                        dnumber1 = Convert.ToDouble(NumberTextBox.Text);
+                        StatusText.Text = dnumber1.ToString();
+                    }
                 }
                 else
                 {
@@ -167,46 +206,79 @@ namespace calculator
                 if (StatusText.Text.Contains(" + "))
                 {
                     adding(number1, number2);
-                    StatusText.Text = number1 + " + " + number2 + " = " + result;
+                    if (number1 != 0 && number2 != 0)
+                    {
+                        StatusText.Text = number1 + " + " + number2 + " = " + result;
+                    }
+                    if (dnumber1 != 0 && number2 != 0)
+                    {
+                        StatusText.Text = dnumber1 + " + " + number2 + " = " + dresult;
+                    }
+                    else if (number1 != 0 && dnumber2 != 0)
+                    {
+                        StatusText.Text = number1 + " + " + dnumber2 + " = " + dresult;
+                    }
                 }
                 else if (StatusText.Text.Contains(" - "))
                 {
-                    if (dnumber1 == 0 && dnumber2 == 0)
+                    subtracting(number1, number2);
+                    if (dnumber1 != 0 && number2 != 0)
                     {
-                        subtracting(number1, number2);
-                        if (dnumber1 == 0 && dnumber2 == 0 && dresult != 0)
-                        {
-                            StatusText.Text = number1 + " - " + number2 + " = " + dresult;
-                        }
-                        else
-                        {
-                            StatusText.Text = number1 + " - " + number2 + " = " + result;
-                        }
+                        StatusText.Text = dnumber1 + " - " + number2 + " = " + dresult;
+                    }
+                    else if (number1 != 0 && dnumber2 != 0)
+                    {
+                        StatusText.Text = number1 + " - " + dnumber2 + " = " + dresult;
                     }
                     else
                     {
-                        d_subtracting(dnumber1, dnumber2);
-                        StatusText.Text = dnumber1 + " - " + dnumber2 + " = " + dresult;
-                    }   
+                        if (dnumber1 == 0 && dnumber2 == 0)
+                        {
+                            if (dnumber1 == 0 && dnumber2 == 0 && dresult != 0)
+                            {
+                                StatusText.Text = number1 + " - " + number2 + " = " + dresult;
+                            }
+                            else
+                            {
+                                StatusText.Text = number1 + " - " + number2 + " = " + result;
+                            }
+                        }
+                        else
+                        {
+                            d_subtracting(dnumber1, dnumber2);
+                            StatusText.Text = dnumber1 + " - " + dnumber2 + " = " + dresult;
+                        }
+                    }
                 }
                 else if (StatusText.Text.Contains(" / "))
                 {
-                    if (dnumber1 == 0 && dnumber2 == 0)
+                    division(number1, number2);
+                    if (dnumber1 != 0 && number2 != 0)
                     {
-                        division(number1, number2);
-                        if (dnumber1 == 0 && dnumber2 == 0 && dresult != 0)
-                        {
-                            StatusText.Text = number1 + " / " + number2 + " = " + dresult;
-                        }
-                        else
-                        {
-                            StatusText.Text = number1 + " / " + number2 + " = " + result;
-                        }
+                        StatusText.Text = dnumber1 + " / " + number2 + " = " + dresult;
+                    }
+                    else if (number1 != 0 && dnumber2 != 0)
+                    {
+                        StatusText.Text = number1 + " / " + dnumber2 + " = " + dresult;
                     }
                     else
                     {
-                        d_division(dnumber1, dnumber2);
-                        StatusText.Text = dnumber1 + " / " + dnumber2 + " = " + dresult;
+                        if (dnumber1 == 0 && dnumber2 == 0)
+                        {
+                            if (dnumber1 == 0 && dnumber2 == 0 && dresult != 0)
+                            {
+                                StatusText.Text = number1 + " / " + number2 + " = " + dresult;
+                            }
+                            else
+                            {
+                                StatusText.Text = number1 + " / " + number2 + " = " + result;
+                            }
+                        }
+                        else
+                        {
+                            d_division(dnumber1, dnumber2);
+                            StatusText.Text = dnumber1 + " / " + dnumber2 + " = " + dresult;
+                        }
                     }
                 }
                 else if (StatusText.Text.Contains(" * "))
@@ -253,44 +325,55 @@ namespace calculator
         {
             if (IntParser(true))
             {
-                if (number1 == 0)
-                {
-                    number1 = Convert.ToInt32(NumberTextBox.Text);
-                    StatusText.Text = number1.ToString();
-                }
-                else
+                if (number1 == 0 || dnumber1 != 0)
                 {
                     if (Convert.ToInt32(NumberTextBox.Text) == 0)
                     {
                         StatusText.Text = "Nem lehet az oszto 0! Reset.";
                         resetNumbers(number1, number2, dnumber1, dnumber2);
                     }
-                    else
+                    else if (dnumber1 != 0)
                     {
                         number2 = Convert.ToInt32(NumberTextBox.Text);
-                        StatusText.Text = number1 + " / " + number2;
+                        StatusText.Text = dnumber1 + " / " + number2;
                     }
-                }
-            }
-            else if (DoubleParser(true))
-            {
-                if (Convert.ToDouble(NumberTextBox.Text) == 0)
-                {
-                    StatusText.Text = "Nem lehet az oszto 0! Reset.";
-                    resetNumbers(number1, number2, dnumber1, dnumber2);
+                    else
+                    {
+                        number1 = Convert.ToInt32(NumberTextBox.Text);
+                        StatusText.Text = number1.ToString();
+                    }
                 }
                 else
                 {
-                    if (dnumber1 == 0)
+                    number2 = Convert.ToInt32(NumberTextBox.Text);
+                    StatusText.Text = number1 + " / " + number2;
+                }
+
+            }
+            else if (DoubleParser(true))
+            {
+                if (dnumber1 == 0 || number1 != 0)
+                {
+                    if (Convert.ToDouble(NumberTextBox.Text) == 0)
+                    {
+                        StatusText.Text = "Nem lehet az oszto 0! Reset.";
+                        resetNumbers(number1, number2, dnumber1, dnumber2);
+                    }
+                    else if (number1 != 0)
+                    {
+                        dnumber2 = Convert.ToDouble(NumberTextBox.Text);
+                        StatusText.Text = number1.ToString() + " / " + dnumber2.ToString();
+                    }
+                    else
                     {
                         dnumber1 = Convert.ToDouble(NumberTextBox.Text);
                         StatusText.Text = dnumber1.ToString();
                     }
-                    else
-                    {
-                        dnumber2 = Convert.ToDouble(NumberTextBox.Text);
-                        StatusText.Text = dnumber1.ToString() + " / " + dnumber2.ToString();
-                    }
+                }
+                else
+                {
+                    dnumber2 = Convert.ToDouble(NumberTextBox.Text);
+                    StatusText.Text = dnumber1.ToString() + " / " + dnumber2.ToString();
                 }
             }
             else
@@ -355,10 +438,18 @@ namespace calculator
         {
             if (IntParser(true))
             {
-                if (number1 == 0)
+                if (number1 == 0 || dnumber1 != 0)
                 {
-                    number1 = Convert.ToInt32(NumberTextBox.Text);
-                    StatusText.Text = number1.ToString();
+                    if (dnumber1 != 0)
+                    {
+                        number2 = Convert.ToInt32(NumberTextBox.Text);
+                        StatusText.Text = dnumber1 + " - " + number2;
+                    }
+                    else
+                    {
+                        number1 = Convert.ToInt32(NumberTextBox.Text);
+                        StatusText.Text = number1.ToString();
+                    }
                 }
                 else
                 {
@@ -368,10 +459,18 @@ namespace calculator
             }
             else if (DoubleParser(true))
             {
-                if (dnumber1 == 0)
+                if (dnumber1 == 0 || number1 != 0)
                 {
-                    dnumber1 = Convert.ToDouble(NumberTextBox.Text);
-                    StatusText.Text = dnumber1.ToString();
+                    if (number1 != 0)
+                    {
+                        dnumber2 = Convert.ToDouble(NumberTextBox.Text);
+                        StatusText.Text = number1.ToString() + " - " + dnumber2.ToString();
+                    }
+                    else
+                    {
+                        dnumber1 = Convert.ToDouble(NumberTextBox.Text);
+                        StatusText.Text = dnumber1.ToString();
+                    }
                 }
                 else
                 {
@@ -384,6 +483,15 @@ namespace calculator
                 StatusText.Text = "error";
             }
             NumberTextBox.Text = string.Empty;
+        }
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            StatusText.Text = "Adja meg az elso szamot!";
         }
     }
 }
